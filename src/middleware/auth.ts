@@ -12,8 +12,6 @@ export const protect = asyncHandler(
   async (request: Request, response: Response, next: NextFunction) => {
     const token = getAuthToken(request);
     const decodedValue = decodeToken(token);
-    console.log(decodedValue)
-    console.log(new JWTUser(decodedValue));
     response.locals.user = new JWTUser(decodedValue);
     logger.info(
       `User ${response.locals.user.id} accessed ${request.url} route`
@@ -35,10 +33,7 @@ function getAuthToken(request: Request) {
 
 function decodeToken(token: string) {
   try {
-    console.log(token, config.jwtSecret)
     const decodedToken = jwt.verify(token, config.jwtSecret as string);
-    
-
     return decodedToken;
   } catch (error) {
     throw authenticationError("Error occured while validating token");
